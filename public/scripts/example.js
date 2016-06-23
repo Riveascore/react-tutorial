@@ -1,10 +1,15 @@
+var dataObj = [
+  {id: 1, author: "Pete Boooo", text: "This is one comment"},
+  {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
+];
+
 var CommentBox = React.createClass({
 
   render() {
     return (
       <div className="commentBox">
         <h1>Comments</h1>
-        <CommentList></CommentList>
+        <CommentList data={this.props.data}></CommentList>
         <CommentForm></CommentForm>
       </div>
     );
@@ -15,16 +20,20 @@ var CommentBox = React.createClass({
 
 
 var CommentList = React.createClass({
-
-  render() {
+  render: function() {
+    var commentNodes = this.props.data.map(function(comment) {
+      return (
+        <Comment author={comment.author} key={comment.id}>
+          {comment.text}
+        </Comment>
+      );
+    });
     return (
       <div className="commentList">
-      <Comment author="Pete Hunt">This is one comment</Comment>
-      <Comment author="Jordan Walke">This is *another* comment</Comment>
+        {commentNodes}
       </div>
     );
   }
-
 });
 
 
@@ -61,4 +70,7 @@ var Comment = React.createClass({
 
 });
 
-ReactDOM.render(<CommentBox />, document.body);
+ReactDOM.render(
+  <CommentBox url="/api/comments" />,
+  document.getElementById('content')
+);
